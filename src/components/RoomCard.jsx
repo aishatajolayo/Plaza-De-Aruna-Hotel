@@ -9,7 +9,7 @@ function RoomCard({ image, title, desc, price }) {
         <p className="font-bold mt-2">{price}</p>
 
         <a
-          href="/booking"
+          href="/Booking"
           className="mt-4 inline-block bg-yellow-900 text-white text-center w-40 py-2 rounded-md font-semibold hover:bg-blue-800 transition"
         >
           Book Now
