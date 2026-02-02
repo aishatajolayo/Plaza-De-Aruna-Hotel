@@ -4,7 +4,7 @@ import FacilityItem from "../components/FacilityItem";
 import Navbar from "../components/NavBar.jsx";
 
 // Hero image
-import heroImg from "../assets/images/plaza-de-aruna.jpg";
+import heroImg from "../assets/images/Plaza-de-aruna.jpg";
 // Import guest images at the top
 import guest1 from "../assets/images/Ellipse-5(2).png";
 import guest2 from "../assets/images/Ellipse-5.png";
@@ -25,7 +25,7 @@ import gymIcon from "../assets/images/gym.svg";
 import gameIcon from "../assets/images/game.svg";
 import lightIcon from "../assets/images/light.svg";
 import laundryIcon from "../assets/images/laundry.svg";
-import parkingIcon from "../assets/images/parking space.svg";
+import parkingIcon from "../assets/images/parking-space.svg";
 
 
 
