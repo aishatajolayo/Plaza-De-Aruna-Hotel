@@ -8,7 +8,7 @@ import Service from "./pages/Service";
 import Contact from "./pages/Contact";
 import Booking from "./pages/Booking";
 import Payment from "./pages/Payment";
-import Success from "./pages/success";
+import Success from "./pages/Success";
 function App() {
   return (
     <>
