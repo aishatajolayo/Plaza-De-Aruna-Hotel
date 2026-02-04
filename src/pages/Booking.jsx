@@ -58,7 +58,7 @@ function Booking() {
       Suite: 3,
     };
 
-    const response = await api.post("/bookings/", {
+    const response = await api.post("/booking/", {
       room: roomIdMap[formData.roomType],
       check_in: formData.checkIn,
       check_out: formData.checkOut,

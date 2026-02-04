@@ -30,7 +30,7 @@ function Header() {
         </ul>
 
         <Link
-          to="/bookings"
+          to="/booking"
           className="hidden md:inline-block py-2 px-6 rounded bg-blue-900 text-white hover:text-yellow-300"
         >
           Book now
