@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+
+
+const API_BASE_URL = "http://172.20.10.7:8000/api";
+
+const ROOM_MAPPING = {
+  Standard: 1,
+  Deluxe: 2,
+  Suite: 3,
+};
 
 const ROOM_PRICES = {
   Standard: 25000,
@@ -10,6 +20,9 @@ const ROOM_PRICES = {
 function Booking() {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,7 +31,6 @@ function Booking() {
     checkOut: "",
   });
 
-  // Calculate number of nights
   const nights =
     formData.checkIn && formData.checkOut
       ? Math.max(
@@ -35,8 +47,26 @@ function Booking() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(e) {
+  e.preventDefault();
+
+  try {
+    // ⚠️ backend expects ROOM ID, not room name
+    const roomIdMap = {
+      Standard: 1,
+      Deluxe: 2,
+      Suite: 3,
+    };
+
+    const response = await api.post("/bookings/", {
+      room: roomIdMap[formData.roomType],
+      check_in: formData.checkIn,
+      check_out: formData.checkOut,
+      name: formData.name,
+      email: formData.email,
+    });
+
+    const bookingFromBackend = response.data;
 
     navigate("/payment", {
       state: {
@@ -44,11 +74,19 @@ function Booking() {
           ...formData,
           nights,
           price: totalPrice,
+          bookingId: bookingFromBackend.id,
         },
       },
     });
-  }
+  } catch (error) {
+  console.error("BOOKING ERROR:", error.response?.data || error.message);
+  alert(
+    error.response?.data?.message ||
+    "Booking failed. Check console for details."
+  );
+}
 
+}
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <form
@@ -56,6 +94,12 @@ function Booking() {
         className="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl space-y-4"
       >
         <h2 className="text-2xl font-bold text-center">Book a Room</h2>
+
+        {error && (
+          <p className="bg-red-100 text-red-700 p-3 rounded text-sm">
+            {error}
+          </p>
+        )}
 
         <input
           type="text"
@@ -80,9 +124,9 @@ function Booking() {
           onChange={handleChange}
           className="w-full border p-3 rounded"
         >
+          <option>Standard</option>
           <option>Deluxe</option>
-          <option>Executive</option>
-          <option>Presidential</option>
+          <option>Suite</option>
         </select>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -121,9 +165,10 @@ function Booking() {
 
         <button
           type="submit"
-          className="w-full bg-yellow-700 text-white py-3 rounded hover:bg-black transition"
+          disabled={loading}
+          className="w-full bg-yellow-700 text-white py-3 rounded hover:bg-black transition disabled:opacity-50"
         >
-          Continue to Payment
+          {loading ? "Creating Booking..." : "Continue to Payment"}
         </button>
       </form>
     </div>

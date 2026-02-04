@@ -8,7 +8,7 @@ import Service from "./pages/Service";
 import Contact from "./pages/Contact";
 import Booking from "./pages/Booking";
 import Payment from "./pages/Payment";
-
+import Success from "./pages/success";
 function App() {
   return (
     <>
@@ -22,6 +22,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/booking" element={<Booking />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/success" element={<Success />} />
+
 
         <Route
           path="*"

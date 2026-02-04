@@ -40,13 +40,12 @@ function Navbar() {
         </ul>
 
         {/* BOOK NOW BUTTON */}
-        <NavLink
-          to="/booking"
-          className="hidden md:inline-block bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-yellow-600 transition"
+        <a
+          href="/booking"
+          className="mt-4 inline-block bg-yellow-900 text-white text-center w-40 py-2 rounded-md font-semibold hover:bg-blue-800 transition"
         >
           Book Now
-        </NavLink>
-
+        </a>
         {/* MOBILE MENU BUTTON */}
         <button
           onClick={() => setOpen(!open)}
