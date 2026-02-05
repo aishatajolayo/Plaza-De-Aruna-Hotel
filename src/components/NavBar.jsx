@@ -76,13 +76,7 @@ function Navbar() {
             );
           })}
 
-          <NavLink
-            to="/booking"
-            onClick={() => setOpen(false)}
-            className="mt-4 bg-blue-900 text-white text-center py-2 rounded-md hover:bg-yellow-600 transition"
-          >
-            Book Now
-          </NavLink>
+         
         </div>
       </div>
     </header>
