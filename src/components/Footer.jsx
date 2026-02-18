@@ -1,4 +1,32 @@
+import { useState } from "react";
+import { subscribeNewsletter } from "../services/api";
+
 function Footer() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+
+    if (!email) {
+      alert("Please enter your email.");
+      return;
+    }
+
+    setLoading(true);
+
+    const result = await subscribeNewsletter(email);
+
+    if (result) {
+      alert("Successfully subscribed to newsletter!");
+      setEmail("");
+    } else {
+      alert("Subscription failed. Try again.");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <footer className="bg-gray-900 text-gray-300 pt-16">
       <div className="container mx-auto px-4 grid md:grid-cols-5 gap-5">
@@ -51,21 +79,23 @@ function Footer() {
         {/* Newsletter */}
         <div>
           <h4 className="text-white font-semibold mb-4">Newsletter</h4>
-          <p className="text-sm mb-4">
-            Subscribe to receive latest offers &amp; updates:
-          </p>
 
-          <form className="flex flex-col sm:flex-row gap-2">
+          <form onSubmit={handleSubscribe} className="flex gap-2">
             <input
               type="email"
               placeholder="Enter your email"
-              className="w-full p-2 rounded text-gray-800"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="px-3 py-2 rounded border w-full"
+              required
             />
+
             <button
               type="submit"
-              className="bg-accent text-black px-4 py-2 rounded hover:opacity-90"
+              disabled={loading}
+              className="bg-yellow-900 text-white px-4 py-2 rounded"
             >
-              Subscribe
+              {loading ? "Subscribing..." : "Subscribe"}
             </button>
           </form>
         </div>
@@ -75,7 +105,7 @@ function Footer() {
       {/* Bottom */}
       <div className="border-t border-gray-700 mt-10 py-4 text-center text-sm">
         © 2026 Plaza De&apos; Aruna Hotel. All rights reserved.
-        Built and maintained by Aishah Ajolayo❤️
+        Built and maintained by Aishah Ajolayo ❤️
       </div>
     </footer>
   );
