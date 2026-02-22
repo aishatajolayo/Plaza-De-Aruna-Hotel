@@ -24,7 +24,13 @@ function Navbar() {
   return (
     <header className="bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-50">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-        
+         {/* MOBILE MENU BUTTON */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden text-3xl text-blue-900"
+        >
+          ☰
+        </button>
         {/* LOGO */}
         <NavLink to="/" className="text-xl md:text-2xl font-bold text-blue-900">
           Plaza De' Aruna
@@ -39,6 +45,7 @@ function Navbar() {
           <li><NavLink to="/contact" className={linkClasses}>Contact</NavLink></li>
         </ul>
 
+        
         {/* BOOK NOW BUTTON */}
         <a
           href="/booking"
@@ -46,13 +53,7 @@ function Navbar() {
         >
           Book Now
         </a>
-        {/* MOBILE MENU BUTTON */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-3xl text-blue-900"
-        >
-          ☰
-        </button>
+       
       </nav>
 
       {/* MOBILE MENU */}

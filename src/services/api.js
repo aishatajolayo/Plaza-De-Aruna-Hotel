@@ -1,9 +1,9 @@
-const BASE_URL = "https://plaza-hotel-backend-zv2l.onrender.com/"; 
+const BASE_URL = "http://81.17.103.145/"; 
 // Rooms API
-
+   
 export const fetchRooms = async () => {
   try {
-    const res = await fetch(`${BASE_URL}/rooms`);
+    const res = await fetch(`${BASE_URL}/rooms/`);
     if (!res.ok) throw new Error("Failed to fetch rooms");
     return await res.json();
   } catch (err) {
@@ -27,7 +27,7 @@ export const fetchAvailableRooms = async () => {
 
 export const fetchBookings = async () => {
   try {
-    const res = await fetch(`${BASE_URL}/bookings`);
+    const res = await fetch(`${BASE_URL}/api/bookings/public/book/`);
     if (!res.ok) throw new Error("Failed to fetch bookings");
     return await res.json();
   } catch (err) {
@@ -38,7 +38,7 @@ export const fetchBookings = async () => {
 
 export const createBooking = async (bookingData) => {
   try {
-    const res = await fetch(`${BASE_URL}/bookings`, {
+    const res = await fetch(`${BASE_URL}/api/bookings/public/book/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(bookingData),
@@ -51,11 +51,11 @@ export const createBooking = async (bookingData) => {
   }
 };
 
-// Messages API (for contact/feedback)
+// Messages API (for contact)
 
 export const sendMessage = async (messageData) => {
   try {
-    const res = await fetch(`${BASE_URL}api/messages`, {
+    const res = await fetch(`${BASE_URL}api/messages/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(messageData),
@@ -72,7 +72,7 @@ export const sendMessage = async (messageData) => {
 
 export const createPayment = async (paymentData) => {
   try {
-    const res = await fetch(`${BASE_URL}api/payments/initialize`, {
+    const res = await fetch(`${BASE_URL}api/payments/initialize/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(paymentData),
