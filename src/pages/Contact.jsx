@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { sendMessage } from "../services/api"; // Matches your api.js function name
+import { sendMessage } from "../services/api"; 
 import GoogleMap from "../components/GoogleMap";
 import heroBg from "../assets/images/rectangle-5.png";
 import Footer from "../components/Footer";
 
 function Contact() {
-  // 1. Initialize State (Footer Format)
+  // 1. Initialize State 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    message: "",
+    content:""
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -24,19 +24,19 @@ function Contact() {
     }));
   };
 
-  // 3. Handle Form Submission (Footer Logic)
+  // 3. Handle Form Submission 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic validation
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name || !formData.email || !formData.content) {
       alert("Please fill in all fields.");
       return;
     }
 
     setLoading(true);
 
-    // Call the API function from your api.js
+    
     const result = await sendMessage(formData);
 
     if (result) {
@@ -126,9 +126,9 @@ function Contact() {
                       Message
                     </label>
                     <textarea
-                      name="message" // Matches key in formData
+                      name="content" // Matches key in formData
                       rows="5"
-                      value={formData.message}
+                      value={formData.content}
                       onChange={handleChange}
                       required
                       className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-yellow-500 outline-none"

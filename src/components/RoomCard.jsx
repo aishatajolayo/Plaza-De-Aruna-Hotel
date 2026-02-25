@@ -1,50 +1,64 @@
 import { Link } from "react-router-dom";
 
-function RoomCard({ image, title, desc, price, status }) {
+function RoomCard({
+  id,
+  room_number,
+  room_type_display,
+  description,
+  price,
+  status,
+  status_display,
+  image,
+}) {
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden group transition duration-500 hover:shadow-2xl">
-      
+    <div className="overflow-hidden transition duration-500 bg-white shadow-lg rounded-2xl group hover:shadow-2xl">
       {/* Image */}
-      <div className="overflow-hidden relative">
+      <div className="relative overflow-hidden">
         <img
           src={image}
-          alt={title}
-          className="h-60 w-full object-cover transform group-hover:scale-110 transition duration-700"
+          alt={room_type_display}
+          className="object-cover w-full transition duration-700 transform h-60 group-hover:scale-110"
         />
 
         {status !== "available" && (
-          <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">
-            {status?.toUpperCase()}
+          <span className="absolute px-2 py-1 text-xs font-semibold text-white bg-red-600 rounded top-3 left-3">
+            {status_display?.toUpperCase()}
           </span>
         )}
       </div>
 
       {/* Content */}
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">
-          {title}
+        <h3 className="mb-2 text-xl font-semibold text-gray-800">
+          {room_type_display}
         </h3>
 
-        <p className="text-sm text-gray-600 leading-relaxed mb-4">
-          {desc}
+        <p className="mb-4 text-sm leading-relaxed text-gray-600">
+          {description}
         </p>
 
         <div className="flex items-center justify-between">
           <p className="text-lg font-bold text-yellow-900">
-            ₦{price?.toLocaleString()} / night
+            ₦{parseFloat(price)?.toLocaleString()} / night
           </p>
 
           {status === "available" ? (
             <Link
               to="/booking"
-              state={{ room: { title, price } }}
-              className="bg-yellow-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-800 transition duration-300"
+              state={{
+                roomId: id,
+                roomNumber: room_number,
+                roomTypeDisplay: room_type_display,
+                price: parseFloat(price),
+                image: image,
+              }}
+              className="px-5 py-2 text-sm font-semibold text-white transition duration-300 bg-yellow-900 rounded-lg hover:bg-yellow-800"
             >
               Book Now
             </Link>
           ) : (
             <button
-              className="bg-gray-400 text-white px-5 py-2 rounded-lg text-sm font-semibold cursor-not-allowed"
+              className="px-5 py-2 text-sm font-semibold text-white bg-gray-400 rounded-lg cursor-not-allowed"
               disabled
             >
               Not Available

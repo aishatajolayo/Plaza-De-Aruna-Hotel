@@ -1,4 +1,4 @@
-// src/components/TestimonialCard.jsx
+
 function TestimonialCard({ image, name, location, message }) {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md text-center">

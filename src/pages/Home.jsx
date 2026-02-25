@@ -5,7 +5,7 @@ import Navbar from "../components/NavBar.jsx";
 
 // Hero image
 import heroImg from "../assets/images/Plaza-de-aruna.jpg";
-// Import guest images at the top
+
 import guest1 from "../assets/images/Ellipse-5(2).png";
 import guest2 from "../assets/images/Ellipse-5.png";
 import guest3 from "../assets/images/Ellipse-5(1).png";

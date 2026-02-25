@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-const ROOM_PRICES = { Deluxe: 45000, Executive: 65000, Presidential: 120000 };
-const ROOM_ID_MAP = { Deluxe: 1, Executive: 2, Presidential: 3 };
+import { useNavigate, useLocation } from "react-router-dom";
+import { createBooking } from "../services/api";
 
 function Booking() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const selectedRoom = location.state;
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    roomType: "Deluxe",
     checkIn: "",
     checkOut: "",
   });
@@ -22,12 +22,11 @@ function Booking() {
       ? Math.max(
           (new Date(formData.checkOut) - new Date(formData.checkIn)) /
             (1000 * 60 * 60 * 24),
-          1
+          1,
         )
       : 0;
 
-  const pricePerNight = ROOM_PRICES[formData.roomType];
-  const totalPrice = nights * pricePerNight;
+  const totalPrice = nights * (selectedRoom?.price || 0);
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,21 +38,22 @@ function Booking() {
     setError("");
 
     try {
-      const response = await api.post("/bookings/", {
-        room: ROOM_ID_MAP[formData.roomType],
+      const response = await createBooking({
+        room: selectedRoom.roomId,
         check_in: formData.checkIn,
         check_out: formData.checkOut,
-        name: formData.name,
-        email: formData.email,
+        guest_name: formData.name,
+        guest_email: formData.email,
       });
 
       navigate("/payment", {
         state: {
           booking: {
             ...formData,
+            ...selectedRoom,
             nights,
-            price: totalPrice,
-            bookingId: response.data.id,
+            totalPrice,
+            bookingId: response.id,
           },
         },
       });
@@ -65,16 +65,52 @@ function Booking() {
     }
   }
 
+  // Guard: if someone navigates to /booking directly without selecting a room
+  if (!selectedRoom) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center">
+          <p className="mb-4 text-xl font-semibold text-blue-900">
+            No room selected
+          </p>
+          <a href="/rooms" className="text-yellow-700 underline">
+            Go back and select a room
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+    <div className="flex items-center justify-center min-h-screen px-4 bg-gray-100">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl space-y-4"
+        className="w-full max-w-xl p-6 space-y-4 bg-white shadow-lg rounded-xl"
       >
         <h2 className="text-2xl font-bold text-center">Book a Room</h2>
 
+        {/* ✅ Room Summary Card - so user knows what they're booking */}
+        <div className="flex gap-4 p-4 border rounded-lg bg-gray-50">
+          <img
+            src={selectedRoom.image}
+            alt={selectedRoom.roomTypeDisplay}
+            className="object-cover w-24 h-24 rounded-lg"
+          />
+          <div>
+            <p className="text-lg font-bold text-blue-900">
+              {selectedRoom.roomTypeDisplay}
+            </p>
+            <p className="text-sm text-gray-500">
+              Room {selectedRoom.roomNumber}
+            </p>
+            <p className="mt-1 font-semibold text-yellow-700">
+              ₦{selectedRoom.price.toLocaleString()} / night
+            </p>
+          </div>
+        </div>
+
         {error && (
-          <p className="bg-red-100 text-red-700 p-3 rounded text-sm">{error}</p>
+          <p className="p-3 text-sm text-red-700 bg-red-100 rounded">{error}</p>
         )}
 
         <input
@@ -84,7 +120,7 @@ function Booking() {
           placeholder="Full Name"
           required
           onChange={handleChange}
-          className="w-full border p-3 rounded"
+          className="w-full p-3 border rounded"
         />
 
         <input
@@ -94,21 +130,10 @@ function Booking() {
           placeholder="Email Address"
           required
           onChange={handleChange}
-          className="w-full border p-3 rounded"
+          className="w-full p-3 border rounded"
         />
 
-        <select
-          name="roomType"
-          value={formData.roomType}
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-        >
-          <option>Deluxe</option>
-          <option>Executive</option>
-          <option>Presidential</option>
-        </select>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className="text-sm font-medium">Check-in</label>
             <input
@@ -117,10 +142,9 @@ function Booking() {
               value={formData.checkIn}
               required
               onChange={handleChange}
-              className="w-full border p-3 rounded"
+              className="w-full p-3 border rounded"
             />
           </div>
-
           <div>
             <label className="text-sm font-medium">Check-out</label>
             <input
@@ -129,27 +153,29 @@ function Booking() {
               value={formData.checkOut}
               required
               onChange={handleChange}
-              className="w-full border p-3 rounded"
+              className="w-full p-3 border rounded"
             />
           </div>
         </div>
 
         {nights > 0 && (
-          <div className="bg-gray-50 p-4 rounded text-sm">
+          <div className="p-4 text-sm rounded bg-gray-50">
             <p>
               <b>Nights:</b> {nights}
             </p>
             <p>
-              <b>Price per night:</b> ₦{pricePerNight.toLocaleString()}
+              <b>Price per night:</b> ₦{selectedRoom.price.toLocaleString()}
             </p>
-            <p className="font-semibold">Total: ₦{totalPrice.toLocaleString()}</p>
+            <p className="font-semibold">
+              Total: ₦{totalPrice.toLocaleString()}
+            </p>
           </div>
         )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-yellow-700 text-white py-3 rounded hover:bg-black transition disabled:opacity-50"
+          className="w-full py-3 text-white transition bg-yellow-700 rounded hover:bg-black disabled:opacity-50"
         >
           {loading ? "Creating Booking..." : "Continue to Payment"}
         </button>

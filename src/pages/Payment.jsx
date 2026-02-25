@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, Navigate } from "react-router-dom";
-import { createPayment } from "../services/api"; // Updated to match your api.js function
+import { createPayment } from "../services/api";
 
 function Payment() {
   const location = useLocation();
@@ -18,7 +18,6 @@ function Payment() {
     // Prepare data for the API
     const paymentData = {
       booking_id: booking.bookingId,
-      // You can add more fields here if your backend needs them (e.g., email: booking.email)
     };
 
     const result = await createPayment(paymentData);
@@ -28,45 +27,48 @@ function Payment() {
       window.location.href = result.authorization_url;
     } else {
       // Error handling
-      alert("Payment initialization failed. Please try again or contact support.");
-      setLoading(false); // Only set loading to false if we stay on the page
+      alert(
+        "Payment initialization failed. Please try again or contact support.",
+      );
+      setLoading(false); // set loading to false if we stay on the page
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
-      <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full p-6 space-y-6">
-        
-        <h2 className="text-2xl font-bold text-center text-blue-900">Confirm Payment</h2>
+    <div className="flex items-center justify-center min-h-screen px-4 py-10 bg-gray-100">
+      <div className="w-full max-w-3xl p-6 space-y-6 bg-white shadow-lg rounded-xl">
+        <h2 className="text-2xl font-bold text-center text-blue-900">
+          Confirm Payment
+        </h2>
 
         {/* Booking Summary */}
-        <div className="bg-gray-50 p-6 rounded-lg space-y-3 text-sm border border-gray-200">
-          <p className="flex justify-between border-b pb-2">
-            <span className="text-gray-500">Name:</span> 
+        <div className="p-6 space-y-3 text-sm border border-gray-200 rounded-lg bg-gray-50">
+          <p className="flex justify-between pb-2 border-b">
+            <span className="text-gray-500">Name:</span>
             <span className="font-semibold">{booking.name}</span>
           </p>
-          <p className="flex justify-between border-b pb-2">
-            <span className="text-gray-500">Email:</span> 
+          <p className="flex justify-between pb-2 border-b">
+            <span className="text-gray-500">Email:</span>
             <span className="font-semibold">{booking.email}</span>
           </p>
-          <p className="flex justify-between border-b pb-2">
-            <span className="text-gray-500">Room:</span> 
+          <p className="flex justify-between pb-2 border-b">
+            <span className="text-gray-500">Room:</span>
             <span className="font-semibold">{booking.roomType}</span>
           </p>
-          <p className="flex justify-between border-b pb-2">
-            <span className="text-gray-500">Check-in:</span> 
+          <p className="flex justify-between pb-2 border-b">
+            <span className="text-gray-500">Check-in:</span>
             <span className="font-semibold">{booking.checkIn}</span>
           </p>
-          <p className="flex justify-between border-b pb-2">
-            <span className="text-gray-500">Check-out:</span> 
+          <p className="flex justify-between pb-2 border-b">
+            <span className="text-gray-500">Check-out:</span>
             <span className="font-semibold">{booking.checkOut}</span>
           </p>
-          <p className="flex justify-between border-b pb-2">
-            <span className="text-gray-500">Duration:</span> 
+          <p className="flex justify-between pb-2 border-b">
+            <span className="text-gray-500">Duration:</span>
             <span className="font-semibold">{booking.nights} Night(s)</span>
           </p>
 
-          <div className="pt-3 flex justify-between text-lg font-bold text-blue-900">
+          <div className="flex justify-between pt-3 text-lg font-bold text-blue-900">
             <span>Total Amount</span>
             <span>₦{booking.price?.toLocaleString()}</span>
           </div>
@@ -76,15 +78,17 @@ function Payment() {
         <button
           onClick={handlePayment}
           disabled={loading}
-          className="w-full bg-yellow-700 text-white py-4 rounded-lg font-semibold hover:bg-black transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="w-full py-4 font-semibold text-white transition bg-yellow-700 rounded-lg hover:bg-black disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
-          {loading ? "Processing..." : `Pay ₦${booking.price?.toLocaleString()} with Paystack`}
+          {loading
+            ? "Processing..."
+            : `Pay ₦${booking.price?.toLocaleString()} with Paystack`}
         </button>
 
-        <p className="text-xs text-center text-gray-500 italic">
-          🔒 Secure Payment: You will be redirected to Paystack to complete your transaction.
+        <p className="text-xs italic text-center text-gray-500">
+          🔒 Secure Payment: You will be redirected to Paystack to complete your
+          transaction.
         </p>
-
       </div>
     </div>
   );
