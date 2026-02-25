@@ -1,4 +1,4 @@
-const BASE_URL = "http://81.17.103.145";
+const BASE_URL = "https://81.17.103.145";
 // Rooms API
 
 export const fetchRooms = async () => {
