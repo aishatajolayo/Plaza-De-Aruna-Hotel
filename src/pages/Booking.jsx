@@ -33,37 +33,85 @@ function Booking() {
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-    try {
-      const response = await createBooking({
-        room: selectedRoom.roomId,
-        check_in: formData.checkIn,
-        check_out: formData.checkOut,
-        guest_name: formData.name,
-        guest_email: formData.email,
-      });
+  // Trim values
+  const name = formData.name.trim();
+  const email = formData.email.trim();
 
-      navigate("/payment", {
-        state: {
-          booking: {
-            ...formData,
-            ...selectedRoom,
-            nights,
-            totalPrice,
-            bookingId: response.id,
-          },
-        },
-      });
-    } catch (err) {
-      console.error("BOOKING ERROR:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Booking failed");
-    } finally {
-      setLoading(false);
-    }
+  // Email regex validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email)) {
+    setError("Please enter a valid email address.");
+    setLoading(false);
+    return;
   }
+
+  if (!name) {
+    setError("Full name is required.");
+    setLoading(false);
+    return;
+  }
+
+  if (!formData.checkIn || !formData.checkOut) {
+    setError("Please select check-in and check-out dates.");
+    setLoading(false);
+    return;
+  }
+
+  const checkInDate = new Date(formData.checkIn);
+  const checkOutDate = new Date(formData.checkOut);
+
+  if (checkOutDate <= checkInDate) {
+    setError("Check-out date must be after check-in date.");
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const response = await createBooking({
+      room: selectedRoom.roomId,
+      check_in: formData.checkIn,
+      check_out: formData.checkOut,
+      guest_name: name,
+      guest_email: email,
+    });
+
+    console.log("BOOKING RESPONSE:", response);
+
+    if (!response || !response.booking_id) {
+      throw new Error("Booking creation failed. No booking ID returned.");
+    }
+
+    navigate("/payment", {
+      state: {
+        booking: {
+          ...formData,
+          ...selectedRoom,
+          nights,
+          totalPrice,
+          booking_id: response.booking_id,
+        },
+      },
+    });
+  } catch (err) {
+    console.error("BOOKING ERROR:", err.response?.data || err.message);
+
+    // If backend sends field errors (Django style)
+    if (err.response?.data) {
+      const backendErrors = Object.values(err.response.data).flat().join(" ");
+      setError(backendErrors);
+    } else {
+      setError("Booking failed. Please try again.");
+    }
+  } finally {
+    setLoading(false);
+  }
+}
+  
 
   // Guard: if someone navigates to /booking directly without selecting a room
   if (!selectedRoom) {
@@ -131,6 +179,7 @@ function Booking() {
           required
           onChange={handleChange}
           className="w-full p-3 border rounded"
+          autoComplete="email"
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -143,6 +192,7 @@ function Booking() {
               required
               onChange={handleChange}
               className="w-full p-3 border rounded"
+              min={new Date().toISOString().split("T")[0]}
             />
           </div>
           <div>
@@ -154,6 +204,7 @@ function Booking() {
               required
               onChange={handleChange}
               className="w-full p-3 border rounded"
+              min={formData.checkIn || new Date().toISOString().split("T")[0]}
             />
           </div>
         </div>

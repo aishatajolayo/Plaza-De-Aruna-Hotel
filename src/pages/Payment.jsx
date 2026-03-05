@@ -6,33 +6,46 @@ function Payment() {
   const location = useLocation();
   const booking = location.state?.booking;
 
-  // State for loading (matching Footer/Contact format)
   const [loading, setLoading] = useState(false);
 
-  // If user lands here directly without booking data, redirect back
   if (!booking) return <Navigate to="/booking" />;
 
+  console.log("Booking data:", booking);
+
   const handlePayment = async () => {
+  try {
+    if (!booking.booking_id) {
+      alert("Booking ID missing.");
+      return;
+    }
+    
+
     setLoading(true);
 
-    // Prepare data for the API
     const paymentData = {
-      booking_id: booking.bookingId,
-    };
+  booking_id: booking.booking_id,
+  email: booking.email,
+};
 
-    const result = await createPayment(paymentData);
+    console.log("Sending payment:", paymentData);
 
-    if (result && result.authorization_url) {
-      // Success: Redirect to Paystack checkout
+    const result = await createPayment(booking.booking_id, booking.email);
+    console.log("Resonse", result)
+    if (result?.authorization_url) {
       window.location.href = result.authorization_url;
     } else {
-      // Error handling
-      alert(
-        "Payment initialization failed. Please try again or contact support.",
-      );
-      setLoading(false); // set loading to false if we stay on the page
+      console.error("Backend returned:", result);
+      throw new Error("No authorization URL returned");
     }
-  };
+
+  } catch (error) {
+    console.error("Payment error:", error);
+    alert("Payment initialization failed. Please try again.");
+    setLoading(false);
+  }
+};
+
+  const totalAmount = booking.price * booking.nights;
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4 py-10 bg-gray-100">
@@ -41,28 +54,34 @@ function Payment() {
           Confirm Payment
         </h2>
 
-        {/* Booking Summary */}
         <div className="p-6 space-y-3 text-sm border border-gray-200 rounded-lg bg-gray-50">
           <p className="flex justify-between pb-2 border-b">
             <span className="text-gray-500">Name:</span>
             <span className="font-semibold">{booking.name}</span>
           </p>
+
           <p className="flex justify-between pb-2 border-b">
             <span className="text-gray-500">Email:</span>
             <span className="font-semibold">{booking.email}</span>
           </p>
+
           <p className="flex justify-between pb-2 border-b">
             <span className="text-gray-500">Room:</span>
-            <span className="font-semibold">{booking.roomType}</span>
+            <span className="font-semibold">
+              {booking.roomTypeDisplay} (Room {booking.roomNumber})
+            </span>
           </p>
+
           <p className="flex justify-between pb-2 border-b">
             <span className="text-gray-500">Check-in:</span>
             <span className="font-semibold">{booking.checkIn}</span>
           </p>
+
           <p className="flex justify-between pb-2 border-b">
             <span className="text-gray-500">Check-out:</span>
             <span className="font-semibold">{booking.checkOut}</span>
           </p>
+
           <p className="flex justify-between pb-2 border-b">
             <span className="text-gray-500">Duration:</span>
             <span className="font-semibold">{booking.nights} Night(s)</span>
@@ -70,11 +89,10 @@ function Payment() {
 
           <div className="flex justify-between pt-3 text-lg font-bold text-blue-900">
             <span>Total Amount</span>
-            <span>₦{booking.price?.toLocaleString()}</span>
+            <span>₦{totalAmount.toLocaleString()}</span>
           </div>
         </div>
 
-        {/* Paystack Button */}
         <button
           onClick={handlePayment}
           disabled={loading}
@@ -82,12 +100,11 @@ function Payment() {
         >
           {loading
             ? "Processing..."
-            : `Pay ₦${booking.price?.toLocaleString()} with Paystack`}
+            : `Pay ₦${totalAmount.toLocaleString()} with Paystack`}
         </button>
 
         <p className="text-xs italic text-center text-gray-500">
-          🔒 Secure Payment: You will be redirected to Paystack to complete your
-          transaction.
+          🔒 Secure Payment: You will be redirected to Paystack to complete your transaction.
         </p>
       </div>
     </div>

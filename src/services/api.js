@@ -1,4 +1,4 @@
-const BASE_URL = "https://81.17.103.145";
+const BASE_URL = "http://81.17.103.145";
 // Rooms API
 
 export const fetchRooms = async () => {
@@ -62,6 +62,7 @@ export const sendMessage = async (messageData) => {
 
     const data = await res.json();
     console.log("Backend response:", data);
+    console.log("Backend payment response:", data);
 
     if (!res.ok) throw new Error("Failed to send message");
 
@@ -72,19 +73,37 @@ export const sendMessage = async (messageData) => {
   }
 };
 
+
 // Payment API
 
-export const createPayment = async (paymentData) => {
+export const createPayment = async (bookingId,email) => {
   try {
-    const res = await fetch(`${BASE_URL}/api/payments/initialize/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(paymentData),
-    });
-    if (!res.ok) throw new Error("Payment failed");
-    return await res.json();
-  } catch (err) {
-    console.error(err);
+    const response = await fetch(
+      `${BASE_URL}/api/payments/initialize/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          booking_id: bookingId,
+          email: email,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    console.log("PAYMENT BACKEND RESPONSE:", data);
+
+    if (!response.ok) {
+      throw new Error(data.error || "Payment initialization failed");
+    }
+
+    return data;
+
+  } catch (error) {
+    console.error("Payment error:", error);
     return null;
   }
 };
