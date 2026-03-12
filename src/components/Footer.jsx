@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { subscribeNewsletter } from "../services/api";
-
+import { HOTEL_NAME } from "../config";
 function Footer() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,10 +34,10 @@ function Footer() {
         {/* Hotel Info */}
         <div>
           <h3 className="text-white text-xl font-semibold mb-4">
-            Plaza De&apos; Aruna
+            { HOTEL_NAME }
           </h3>
           <p className="text-xs leading-relaxed">
-            Hotel De Aruna Plaza offers comfort, luxury, and excellent hospitality.
+             { HOTEL_NAME } offers comfort, luxury, and excellent hospitality.
             We are committed to making every stay memorable and relaxing.
           </p>
         </div>
@@ -72,7 +72,7 @@ function Footer() {
           <ul className="space-y-2 text-sm">
             <li>📍 OYO, Oyo State, Nigeria</li>
             <li>📞 +234 810 738 6011</li>
-            <li>✉ info@plazadearuna.com</li>
+            <li>✉ info@ { HOTEL_NAME }.com</li>
           </ul>
         </div>
 
@@ -104,7 +104,7 @@ function Footer() {
 
       {/* Bottom */}
       <div className="border-t border-gray-700 mt-10 py-4 text-center text-sm">
-        © 2026 Plaza De&apos; Aruna Hotel. All rights reserved.
+        © 2026 { HOTEL_NAME }. All rights reserved.
         Built and maintained by Aishah Ajolayo ❤️
       </div>
     </footer>

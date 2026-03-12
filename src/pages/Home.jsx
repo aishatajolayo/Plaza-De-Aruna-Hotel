@@ -4,7 +4,7 @@ import FacilityItem from "../components/FacilityItem";
 import Navbar from "../components/NavBar.jsx";
 
 // Hero image
-import heroImg from "../assets/images/Plaza-de-aruna.jpg";
+import heroImg from "../assets/images/Rectangle-10.png";
 
 import guest1 from "../assets/images/Ellipse-5(2).png";
 import guest2 from "../assets/images/Ellipse-5.png";
@@ -26,6 +26,7 @@ import gameIcon from "../assets/images/game.svg";
 import lightIcon from "../assets/images/light.svg";
 import laundryIcon from "../assets/images/laundry.svg";
 import parkingIcon from "../assets/images/parking-space.svg";
+import { HOTEL_NAME } from "../config.js";
 
 
 
@@ -39,7 +40,7 @@ function Home() {
       <section className="relative h-[70vh] md:h-[85vh]">
         <img
           src={heroImg}
-          alt="Hotel De Aruna Plaza"
+          alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/80"></div>
@@ -50,7 +51,7 @@ function Home() {
               Experience Comfort & Luxury
             </h2>
             <p className="mb-6">
-              Welcome to Plaza De&apos; Aruna Hotel — your perfect stay for relaxation and elegance.
+              Welcome to { HOTEL_NAME } your perfect stay for relaxation and elegance.
             </p>
             <a
               href="/rooms"
@@ -132,7 +133,7 @@ function Home() {
       Guest Testimonials
     </h2>
     <p className="text-center text-gray-600 mb-12">
-      Hear what our guests say about their experience at Hotel De Aruna Plaza
+      Hear what our guests say about their experience at {HOTEL_NAME}
     </p>
 
     {/* Testimonials Grid */}
@@ -141,21 +142,21 @@ function Home() {
         image={guest1}
         name="Amina Bello"
         location="Lagos, Nigeria"
-        message="“The service at the Hotel Monteleone was exceptional. There was absolutely no issue that was not addressed timely and with satisfactory results. We were particularly impressed with how the hotel staff anticipated our needs. Numerous conference attendees commented on the quality of the food, the quality of the service, and overall positive attitude toward the conference site. Particular noteworthy is the longevity of the staff and that sense of investment in the success of every event. I usually offer suggestions for improvements (part of being a marketing professor), but there is absolutely nothing that could be improved – you have set the bar very high.”"
+        message="“The service at the Bloom Space was exceptional. There was absolutely no issue that was not addressed timely and with satisfactory results. We were particularly impressed with how the hotel staff anticipated our needs. Numerous conference attendees commented on the quality of the food, the quality of the service, and overall positive attitude toward the conference site. Particular noteworthy is the longevity of the staff and that sense of investment in the success of every event. I usually offer suggestions for improvements (part of being a marketing professor), but there is absolutely nothing that could be improved – you have set the bar very high.”"
       />
 
       <TestimonialCard
         image={guest2}
         name="John Okafor"
         location="Abuja, Nigeria"
-        message="“The service at the Hotel Monteleone was exceptional. There was absolutely no issue that was not addressed timely and with satisfactory results. We were particularly impressed with how the hotel staff anticipated our needs. Numerous conference attendees commented on the quality of the food, the quality of the service, and overall positive attitude toward the conference site. Particular noteworthy is the longevity of the staff and that sense of investment in the success of every event. I usually offer suggestions for improvements (part of being a marketing professor), but there is absolutely nothing that could be improved – you have set the bar very high.”"
+        message="“The service at the Bloom Space was exceptional. There was absolutely no issue that was not addressed timely and with satisfactory results. We were particularly impressed with how the hotel staff anticipated our needs. Numerous conference attendees commented on the quality of the food, the quality of the service, and overall positive attitude toward the conference site. Particular noteworthy is the longevity of the staff and that sense of investment in the success of every event. I usually offer suggestions for improvements (part of being a marketing professor), but there is absolutely nothing that could be improved – you have set the bar very high.”"
       />
 
       <TestimonialCard
         image={guest3}
         name="Sarah Williams"
         location="London, UK"
-        message="“The service at the Hotel Monteleone was exceptional. There was absolutely no issue that was not addressed timely and with satisfactory results. We were particularly impressed with how the hotel staff anticipated our needs. Numerous conference attendees commented on the quality of the food, the quality of the service, and overall positive attitude toward the conference site. Particular noteworthy is the longevity of the staff and that sense of investment in the success of every event. I usually offer suggestions for improvements (part of being a marketing professor), but there is absolutely nothing that could be improved – you have set the bar very high.”"
+        message="“The service at the Bloom Space was exceptional. There was absolutely no issue that was not addressed timely and with satisfactory results. We were particularly impressed with how the hotel staff anticipated our needs. Numerous conference attendees commented on the quality of the food, the quality of the service, and overall positive attitude toward the conference site. Particular noteworthy is the longevity of the staff and that sense of investment in the success of every event. I usually offer suggestions for improvements (part of being a marketing professor), but there is absolutely nothing that could be improved – you have set the bar very high.”"
       />
     </div>
   </div>

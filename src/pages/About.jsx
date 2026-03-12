@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/NavBar.jsx";
 import Footer from "../components/Footer";
-
+import { HOTEL_NAME } from "../config";
 
 function About() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,13 +24,12 @@ function About() {
           <h2 className="text-3xl font-bold mb-6">About Us</h2>
 
           <p className="mb-4">
-            Plaza De' Aruna Hotel is a modern luxury hotel dedicated to providing
+            {HOTEL_NAME} is a modern luxury hotel dedicated to providing
             exceptional comfort, world-class service, and a memorable stay for every guest.
           </p>
 
           <p className="mb-4">
-            Located in a serene environment, our hotel combines elegance, hospitality,
-            and convenience for business travelers, families, and tourists.
+            Located in a serene environment, our hotel combines elegance, hospitality,and convenience for business travelers, families, and tourists.
           </p>
 
           <p>

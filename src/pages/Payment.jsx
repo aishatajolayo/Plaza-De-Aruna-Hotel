@@ -86,7 +86,7 @@ function Payment() {
             <span className="text-gray-500">Duration:</span>
             <span className="font-semibold">{booking.nights} Night(s)</span>
           </p>
-
+ 
           <div className="flex justify-between pt-3 text-lg font-bold text-blue-900">
             <span>Total Amount</span>
             <span>₦{totalAmount.toLocaleString()}</span>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { HOTEL_NAME } from "../config";
 function Header() {
   const [open, setOpen] = useState(false);
 
@@ -9,7 +9,7 @@ function Header() {
       <nav className="container mx-auto flex items-center justify-between p-4">
         <Link to="/">
           <h1 className="text-xl md:text-2xl font-bold text-primary">
-            Plaza De&apos; Aruna
+            {HOTEL_NAME}
           </h1>
         </Link>
 

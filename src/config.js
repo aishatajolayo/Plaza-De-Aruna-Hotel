@@ -1,0 +1,1 @@
+export const HOTEL_NAME = import.meta.env.VITE_HOTEL_NAME;

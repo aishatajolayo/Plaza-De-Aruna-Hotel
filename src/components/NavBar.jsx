@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import { HOTEL_NAME } from "../config";
 
 
 function Navbar() {
@@ -33,7 +33,7 @@ function Navbar() {
         </button>
         {/* LOGO */}
         <NavLink to="/" className="text-xl md:text-2xl font-bold text-blue-900">
-          Plaza De' Aruna
+          {HOTEL_NAME}
         </NavLink>
 
         {/* DESKTOP MENU */}
